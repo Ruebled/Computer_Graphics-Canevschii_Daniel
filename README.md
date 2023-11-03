@@ -2,10 +2,13 @@
 
 Canevschii Daniel - 3133A
 
-- [x] Make a 3D cube skeleton
-- [x] Make the cube resize on scroll
-- [x] Make the cube rotate on Numbers key press((2,8),(4,6),(3,9))
-- [ ] Make the cube translate on arrow key
+- [x] Make a 3D cube
+- [x] Make the cube translate on arrow key
+- [ ] Make camera move on middle mouse button click and drag
+- [ ] Change colors of the cube on 'c' to randoms ones
+- [ ] Make the cube resize on scroll
+- [ ] Make the cube rotate on x, z
+
 
 ## Laborator 2 Questions
 #### Ce este un viewport?
