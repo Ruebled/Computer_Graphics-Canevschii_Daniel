@@ -1,15 +1,16 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
-namespace Graphics_Homework
+namespace Canevschii
 {
-    internal class Program
+    public class Program
     {
+        [STAThread]
         static void Main(string[] args)
         {
+            using (Scene scene = new Scene("CubeRenderer"))
+            {
+                scene.Run(30.0, 0.0);
+            }
         }
     }
 }
