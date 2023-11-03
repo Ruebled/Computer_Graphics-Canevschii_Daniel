@@ -6,15 +6,18 @@ using OpenTK.Input;
 using System;
 using System.Drawing;
 
-namespace Canevschii
+namespace Graphics_Homework
 {
     class Scene : GameWindow
     {
         Color4 DEFAULT_BG_COLOR = Color4.LightBlue;
+        Cube cube = new Cube();
 
         public Scene(string windowTitle) : base(800, 600, new GraphicsMode(32, 24, 0, 8), windowTitle)
         {
             VSync = VSyncMode.On;
+
+            ConsolePrintHelp();
         }
 
         protected override void OnLoad(EventArgs e)
@@ -22,6 +25,8 @@ namespace Canevschii
             base.OnLoad(e);
 
             GL.ClearColor(DEFAULT_BG_COLOR);
+
+            // GL.PolygonMode(MaterialFace.FrontAndBack, PolygonMode.Line);
 
             GL.Enable(EnableCap.DepthTest);
             GL.DepthFunc(DepthFunction.Less);
@@ -68,7 +73,21 @@ namespace Canevschii
             GL.Clear(ClearBufferMask.ColorBufferBit);
             GL.Clear(ClearBufferMask.DepthBufferBit);
 
+            // Render Code
+            cube.DrawCube();
+            // End Render Code
+
+
             SwapBuffers();
+        }
+
+        private void ConsolePrintHelp()
+        {
+            Console.WriteLine("\n\tMENIU");
+            Console.WriteLine(" ESC - parasire program");
+            Console.WriteLine(" H - afisare meniu (help)");
+            Console.WriteLine(" R - resetare scena la valori implicite");
+            Console.WriteLine(" B - schimbare culoare de fundal (randomizat)");
         }
     }
 }

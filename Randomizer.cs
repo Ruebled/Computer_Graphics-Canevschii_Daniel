@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Drawing;
 
-namespace Canevschii
+namespace Graphics_Homework
 {
     class Randomizer
     {

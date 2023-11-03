@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Canevschii
+namespace Graphics_Homework
 {
     public class Program
     {
