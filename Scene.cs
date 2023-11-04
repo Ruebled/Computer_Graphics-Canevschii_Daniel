@@ -86,19 +86,19 @@ namespace Graphics_Homework
             // Movement of the cube on the plane and further...
             if (thisKeyboard[Key.Up])
             {
-                cube.setPosition(new Vector3(0, 0, 1));
+                cube.forceZ += 2f;
             }
             if (thisKeyboard[Key.Down])
             {
-                cube.setPosition(new Vector3(0, 0, -1));
+                cube.forceZ += -2f;
             }
             if (thisKeyboard[Key.Left])
             {
-                cube.setPosition(new Vector3(1, 0, 0));
+                cube.forceX += 2f;
             }
             if (thisKeyboard[Key.Right])
             {
-                cube.setPosition(new Vector3(-1, 0, 0));
+                cube.forceX += -2f;
             }
 
             // Rotate the cube on anticlockwise on "X" Key Holding
@@ -135,14 +135,14 @@ namespace Graphics_Homework
                 cameraToOriginRadius += (thisMouse.Y - previousMouse.Y) / (float)10;
             }
 
-            if (thisMouse.ScrollWheelValue > previousMouse.ScrollWheelValue && cube.getSize()<plane.getSize())
+            if (thisMouse.ScrollWheelValue > previousMouse.ScrollWheelValue && cube.cubesize<plane.getSize())
             {
-                cube.increaseSize(1);
+                cube.cubesize += 1;
             }
 
-            if (thisMouse.ScrollWheelValue < previousMouse.ScrollWheelValue && cube.getSize()>1)
+            if (thisMouse.ScrollWheelValue < previousMouse.ScrollWheelValue && cube.cubesize>1)
             {
-                cube.decreaseSize(1);
+                cube.cubesize += -1;
             }
             
             // Save Mouse and Keyboard state for next event compare
@@ -153,6 +153,19 @@ namespace Graphics_Homework
             Matrix4 lookat = Matrix4.LookAt(cameraPosition.X, cameraPosition.Y, cameraPosition.Z, 0, 0, 0, 0, 1, 0);
             GL.MatrixMode(MatrixMode.Modelview);
             GL.LoadMatrix(ref lookat);
+
+            // Check for bottom collision then change displacement to -y
+            bool isnotColided = true;
+            if (isnotColided)
+            {
+                cube.forceY = -9.8f;
+            }
+            else
+            {
+                cube.forceY = 0.0f;
+            }
+            
+            cube.UpdatePosition();
         }
 
         protected override void OnRenderFrame(FrameEventArgs e)

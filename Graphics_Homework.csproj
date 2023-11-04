@@ -50,6 +50,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Collision.cs" />
     <Compile Include="Cube.cs" />
     <Compile Include="Plane.cs" />
     <Compile Include="Point.cs" />

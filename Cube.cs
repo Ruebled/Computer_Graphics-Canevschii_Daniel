@@ -8,10 +8,39 @@ namespace Graphics_Homework
 {
     class Cube
     {
-        private float cubesize;
+        //Gravitation related properties
+        private DateTime lastUpdateTime = DateTime.Now;
+       
+        private Vector3 force = Vector3.Zero;
+
+        private Vector3 velocity = Vector3.Zero;
+
+        public float forceX
+        {
+            get { return force.X;}
+            set { this.force.X = value; }
+        }
+        public float forceY
+        {
+            get { return force.Y; }
+            set { this.force.Y = value; }
+        }
+        public float forceZ
+        {
+            get { return force.Z; }
+            set { this.force.Z = value; }
+        }
+
+        private float mass = 2.0f;
+        private float dt = 0.0f;
+        private Vector3 velocityVector = Vector3.Zero;
+        
+
+        public float cubesize { get; set; }
+
         private float cubePosAngle = 0;
 
-        private Vector3 position = Vector3.Zero;
+        private Vector3 position = new Vector3(0, 50, 0);
         private Vector3 rotation = Vector3.Zero;
 
         private Color[] FaceColors = new Color[]
@@ -27,30 +56,50 @@ namespace Graphics_Homework
         public Cube()
         {
             this.cubesize = 1.0f;
-            this.position.Y += this.cubesize + (float)0.1;
         }
 
-        public void increaseSize(float size)
+        public void UpdatePosition()
         {
-            this.cubesize += size;
-            this.position.Y = this.cubesize+(float)0.1;
-        }
-        public void decreaseSize(float size)
-        {
-            this.cubesize -= size;
-            this.position.Y = this.cubesize+(float)0.1;
-        }
+            DateTime DateTimen = DateTime.Now;
+            this.dt = (float)((DateTimen - lastUpdateTime).TotalMilliseconds/1000.0);
+            
+            this.velocity.Y += (force.Y / mass) * dt;
+            this.position.Y += this.velocity.Y * dt;
 
-        public float getSize()
-        {
-            return this.cubesize;
-        }
+            this.velocity.X += (force.X / mass) * dt;
+            this.position.X += this.velocity.X * dt;
 
-        public void setPosition(Vector3 position)
-        {
-            this.position.X += position.X;
-            this.position.Y += position.Y;
-            this.position.Z += position.Z;
+            this.velocity.Z += (force.Z / mass) * dt;
+            this.position.Z = this.velocity.Z * dt;
+
+            float forceSecondDecrease = 30.0f;
+
+            if(this.force.X > 0)
+            {
+                this.force.X -= forceSecondDecrease * dt;
+            }
+            else
+            {
+                this.force.X += forceSecondDecrease * dt;
+            }
+            if (this.force.Y > 0)
+            {
+                this.force.Y -= forceSecondDecrease * dt;
+            }
+            else
+            {
+                this.force.Y += forceSecondDecrease * dt;
+            }
+            if (this.force.Z > 0)
+            {
+                this.force.Z -= forceSecondDecrease * dt;
+            }
+            else
+            {
+                this.force.Z += forceSecondDecrease * dt;
+            }
+
+            this.lastUpdateTime = DateTime.Now;
         }
 
         public void setRotationAngle(float PosAngle)
