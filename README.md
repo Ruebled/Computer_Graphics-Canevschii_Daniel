@@ -4,10 +4,13 @@ Canevschii Daniel - 3133A
 
 - [x] Make a 3D cube
 - [x] Make the cube translate on arrow key
-- [ ] Make camera move on middle mouse button click and drag
-- [ ] Change colors of the cube on 'c' to randoms ones
-- [ ] Make the cube resize on scroll
-- [ ] Make the cube rotate on x, z
+- [x] Make camera move on middle mouse button click and drag
+- [x] Change cube's face colors on 'c' Key to randoms ones
+- [x] Make the cube resize on scroll
+- [x] Make the cube rotate on x, z
+- [ ] Stop cube movement on plane borders
+- [ ] Think more on plane rotation(unintuitive directions)
+
 
 
 ## Laborator 2 Questions
