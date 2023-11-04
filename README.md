@@ -8,7 +8,7 @@ Canevschii Daniel - 3133A
 - [x] Change cube's face colors on 'c' Key to randoms ones
 - [x] Make the cube resize on scroll
 - [x] Make the cube rotate on x, z
-- [ ] Toggle wireframe/fill mode on 'W' key
+- [x] Toggle wireframe/fill mode on 'W' key
 - [ ] Stop cube movement on plane borders
 - [ ] Think more on plane rotation(unintuitive directions)
 
