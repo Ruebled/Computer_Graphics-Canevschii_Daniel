@@ -23,21 +23,22 @@ namespace Graphics_Homework
             Color.PaleVioletRed,
             Color.ForestGreen
         };
+
         public Cube()
         {
             this.cubesize = 1.0f;
-            this.position.Y += this.cubesize;
+            this.position.Y += this.cubesize + (float)0.1;
         }
 
         public void increaseSize(float size)
         {
             this.cubesize += size;
-            this.position.Y = this.cubesize;
+            this.position.Y = this.cubesize+(float)0.1;
         }
         public void decreaseSize(float size)
         {
             this.cubesize -= size;
-            this.position.Y = this.cubesize;
+            this.position.Y = this.cubesize+(float)0.1;
         }
 
         public float getSize()
@@ -56,6 +57,7 @@ namespace Graphics_Homework
         {
             this.cubePosAngle += PosAngle;
         }
+
         public void setRotationAxis(Vector3 rotation)
         {
             this.rotation.X = rotation.X;

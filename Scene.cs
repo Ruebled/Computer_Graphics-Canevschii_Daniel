@@ -14,7 +14,9 @@ namespace Graphics_Homework
 
         private KeyboardState previousKeyboard;
         private MouseState previousMouse;
-       
+
+        private bool viewCubeWireframe = false;
+
         Cube cube = new Cube();
         Plane plane = new Plane();
         Vector3 cameraPosition = new Vector3(30, 30, 30);
@@ -75,6 +77,7 @@ namespace Graphics_Homework
             KeyboardState thisKeyboard = Keyboard.GetState();
             MouseState thisMouse = Mouse.GetState();
 
+            // Exit application on ESC key
             if (thisKeyboard[Key.Escape])
             {
                 Exit();
@@ -117,6 +120,11 @@ namespace Graphics_Homework
                 cube.changeFaceColors(rando);
             }
 
+            if (thisKeyboard[Key.W] && !previousKeyboard[Key.W])
+            {
+                this.viewCubeWireframe ^= true;
+            }
+
             // Camera movement around the center using the middle button and mouse move
             if (thisMouse[MouseButton.Middle])
             {
@@ -131,10 +139,12 @@ namespace Graphics_Homework
             {
                 cube.increaseSize(1);
             }
+
             if (thisMouse.ScrollWheelValue < previousMouse.ScrollWheelValue && cube.getSize()>1)
             {
                 cube.decreaseSize(1);
             }
+            
             // Save Mouse and Keyboard state for next event compare
             previousMouse = thisMouse;
             previousKeyboard = thisKeyboard;
@@ -154,7 +164,14 @@ namespace Graphics_Homework
 
             // Render Code
             plane.DrawPlane();
+
+            if (viewCubeWireframe)
+            {
+                GL.PolygonMode(MaterialFace.FrontAndBack, PolygonMode.Line);
+            }
             cube.DrawCube();
+            GL.PolygonMode(MaterialFace.FrontAndBack, PolygonMode.Fill);
+            
             // End Render Code
 
 
@@ -165,9 +182,6 @@ namespace Graphics_Homework
         {
             Console.WriteLine("\n\tMENIU");
             Console.WriteLine(" ESC - parasire program");
-            Console.WriteLine(" H - afisare meniu (help)");
-            Console.WriteLine(" R - resetare scena la valori implicite");
-            Console.WriteLine(" B - schimbare culoare de fundal (randomizat)");
         }
     }
 }
