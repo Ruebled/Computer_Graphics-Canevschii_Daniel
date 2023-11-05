@@ -8,6 +8,7 @@ using System.Drawing;
 
 namespace Graphics_Homework
 {
+    
     class Scene : GameWindow
     {
         Color4 DEFAULT_BG_COLOR = Color4.LightBlue;
@@ -17,9 +18,10 @@ namespace Graphics_Homework
 
         private bool viewCubeWireframe = false;
 
+        static Randomizer _r = new Randomizer();
+
         Cube cube = new Cube();
         Plane plane = new Plane();
-        Point point = new Point( 10 , 10, -10);
 
         Vector3 cameraPosition = new Vector3(30, 30, 30);
 
@@ -29,8 +31,6 @@ namespace Graphics_Homework
         public Scene(string windowTitle) : base(800, 600, new GraphicsMode(new ColorFormat(8, 8, 8, 8), 24, 0, 10), windowTitle)
         {
             VSync = VSyncMode.On;
-
-            ConsolePrintHelp();
         }
 
         protected override void OnLoad(EventArgs e)
@@ -52,6 +52,8 @@ namespace Graphics_Homework
             previousKeyboard = new KeyboardState();
 
             cube.setRotationAxis(new Vector3(0, 1, 0));
+
+            Console.WriteLine(System.IO.Directory.GetCurrentDirectory());
         }
 
         protected override void OnResize(EventArgs e)
@@ -181,25 +183,15 @@ namespace Graphics_Homework
            
             // Render Code
             plane.DrawPlane();
-
             if (viewCubeWireframe)
             {
                 GL.PolygonMode(MaterialFace.FrontAndBack, PolygonMode.Line);
             }
-            point.DrawPoint();
             cube.DrawCube();
             GL.PolygonMode(MaterialFace.FrontAndBack, PolygonMode.Fill);
-            
             // End Render Code
 
-
             SwapBuffers();
-        }
-
-        private void ConsolePrintHelp()
-        {
-            Console.WriteLine("\n\tMENIU");
-            Console.WriteLine(" ESC - parasire program");
         }
     }
 }

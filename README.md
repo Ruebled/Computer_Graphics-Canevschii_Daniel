@@ -71,12 +71,13 @@ blocurile GL.Begin(), GL.End();
 
 ### 4. Răspundeți la următoarele întrebări (utilizați ca referință eventual și tutorii OpenGL Nate Robbins):
 #### Care este efectul utilizării directivei LineLoop atunci când desenate segmente de dreaptă multiple în OpenGL?
+Uneste Vertexurile definite in ordinea data pana se uneste cu primul punct formand un cerc din linie franta.
 #### Care este efectul utilizării directivei LineStrip atunci când desenate segmente de dreaptă multiple în OpenGL?
+La fel ca *LineLoop* doar ca nu uneste ultimul punct cu primul, linie franta intrerupta.
 #### Care este efectul utilizării directivei TriangleFan atunci când desenate segmente de dreaptă multiple în OpenGL?
+Conecteaza triunghiurile date sub un vertex comun.
 #### Care este efectul utilizării directivei TriangleStrip atunci când desenate segmente de dreaptă multiple în OpenGL?
-
-### 5. Creați un proiect elementar. Urmăriți exemplul furnizat cu titlu de demonstrație - OpenGL_conn_ImmediateMode. 
-Atenție la setarea viewport-ului.
+Uneste triunghiurile definite in ordinea data(nu neaparat sub un vertex comun).
 
 ### 6. Urmăriți aplicația „shapes.exe” din tutorii OpenGL Nate Robbins.
 #### De ce este importantă utilizarea de culori diferite (în gradient sau culori selectate per suprafață) în desenarea obiectelor 3D? 
@@ -89,14 +90,17 @@ precum curcubeul...
 In OpenTK aceasta se face atribuind fiecarui *Vertex* din figura (Line, Triangle, Quads) ce necesita randata, si 
 activatea obtiunii *GL.Enable(EnableCap.DepthTest);* pentru obtinerea gradientului pe figura.
 
-### 8. Creați o aplicație care la apăsarea unui set de taste va modifica culoarea unui triunghi 
-### între valorile minime și maxime, pentru fiecare canal de culoare. 
+### 8. Creați o aplicație care la apăsarea unui set de taste va modifica culoarea unui triunghi între valorile minime și maxime, pentru fiecare canal de culoare. 
 #### Ce efect va apare la utilizarea canalului de transparență?
-#### Aplicația va permite modificarea unghiului camerei cu ajutorul mouse-ului. 
+*Aplicația va permite modificarea unghiului camerei cu ajutorul mouse-ului.*
+
+Se poate vedea prin fetele cubului - se modifica transparenta.
+
 
 ### 9. Modificați aplicația pentru a manipula valorile RGB pentru fiecare vertex ce definește un triunghi. Afișați valorile RGB în consolă.
+- Done(RGBA);
 
 ### 10. Ce efect are utilizarea unei culori diferite pentru fiecare vertex atunci când desenați o linie sau un triunghi în modul strip?
-
-## References
--  
+In cazul liniei sau a triunghiului nu se observa diferenta, insa in cazul **QuadStrip** se observa gruparea a cate doua triunghiuri, in
+ordinea declarata a vertexurilor, si se obtine o fata din doua triunghiuri sau o fata cu doua triunghiuri la 90 grade rotite, obtinandu-se
+un sfert de fata goala(necolorata).

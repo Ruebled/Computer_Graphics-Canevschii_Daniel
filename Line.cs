@@ -19,8 +19,8 @@ namespace Graphics_Homework
 
         public Line(Randomizer _r)
         {
-            pointA = new Vector3(0, 0, 0);
-            pointB = new Vector3(10, 0, 0);
+            pointA = new Vector3(_r.GetRandomOffsetPositive(10), _r.GetRandomOffsetPositive(10), _r.GetRandomOffsetPositive(10));
+            pointB = new Vector3(_r.GetRandomOffsetPositive(10), _r.GetRandomOffsetPositive(10), _r.GetRandomOffsetPositive(10));
             visibility = true;
             width = DEFAULT_SIZE;
             color = _r.GetRandomColor();
@@ -31,7 +31,7 @@ namespace Graphics_Homework
             if (visibility)
             {
                 GL.LineWidth(width);
-                GL.Begin(PrimitiveType.Lines);
+                GL.Begin(PrimitiveType.LineLoop);
                 GL.Color3(color);
                 GL.Vertex3(pointA);
                 GL.Vertex3(pointB);
