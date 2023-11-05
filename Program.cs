@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Threading;
 
 namespace Graphics_Homework
 {
@@ -11,6 +12,12 @@ namespace Graphics_Homework
             {
                 scene.Run(30.0, 0.0);
             }
+
+            Thread.Sleep(1000);
+
+            Environment.Exit(0);
+           
+            return;
         }
     }
 }
