@@ -30,8 +30,18 @@ namespace Graphics_Homework
             get { return force.Z; }
             set { this.force.Z = value; }
         }
-
-        public float cubesize { get; set; }
+        private float Size;
+        public float cubesize {
+            get
+            {
+                return this.Size;
+            }
+            set
+            {
+                this.Size = value;
+                this.position.Y = value;
+            }
+        }
 
         private float mass {
             get
@@ -43,7 +53,7 @@ namespace Graphics_Homework
 
         private float cubePosAngle = 0;
 
-        private Vector3 position = new Vector3(0, 20, 0);
+        private Vector3 position = Vector3.Zero;
         private Vector3 rotation = Vector3.Zero;
 
         private Color[] FaceColors = new Color[]
@@ -53,12 +63,15 @@ namespace Graphics_Homework
             Color.Moccasin,
             Color.IndianRed,
             Color.PaleVioletRed,
-            Color.ForestGreen
+            Color.ForestGreen,
+            Color.SkyBlue,
+            Color.Aquamarine
         };
 
         public Cube()
         {
             this.cubesize = 1.0f;
+            this.position = new Vector3(0, this.cubesize, 0);
         }
 
         public void UpdatePosition()
@@ -83,7 +96,7 @@ namespace Graphics_Homework
             {
                 this.force.X -= forceSecondDecrease * dt;
             }
-            else
+            else if (this.force.X < 0)
             {
                 this.force.X += forceSecondDecrease * dt;
             }
@@ -91,7 +104,7 @@ namespace Graphics_Homework
             {
                 this.force.Y -= forceSecondDecrease * dt;
             }
-            else
+            else if(this.force.Y < 0)
             {
                 this.force.Y += forceSecondDecrease * dt;
             }
@@ -99,7 +112,7 @@ namespace Graphics_Homework
             {
                 this.force.Z -= forceSecondDecrease * dt;
             }
-            else
+            else if (this.force.Z < 0)
             {
                 this.force.Z += forceSecondDecrease * dt;
             }
@@ -143,41 +156,58 @@ namespace Graphics_Homework
 
             GL.Begin(PrimitiveType.Quads);
 
-            GL.Color3(FaceColors[0]);
+            GL.Color4(FaceColors[0]);
             GL.Vertex3(-cubesize, -cubesize, -cubesize);
+            GL.Color4(FaceColors[1]);
             GL.Vertex3(-cubesize, cubesize, -cubesize);
+            GL.Color4(FaceColors[2]);
             GL.Vertex3(cubesize, cubesize, -cubesize);
+            GL.Color4(FaceColors[3]);
             GL.Vertex3(cubesize, -cubesize, -cubesize);
 
-            GL.Color3(FaceColors[1]);
+            GL.Color4(FaceColors[4]);
             GL.Vertex3(-cubesize, -cubesize, -cubesize);
+            GL.Color4(FaceColors[5]);
             GL.Vertex3(cubesize, -cubesize, -cubesize);
+            GL.Color4(FaceColors[6]);
             GL.Vertex3(cubesize, -cubesize, cubesize);
+            GL.Color4(FaceColors[7]);
             GL.Vertex3(-cubesize, -cubesize, cubesize);
 
-            GL.Color3(FaceColors[2]);
-
+            GL.Color4(FaceColors[6]);
             GL.Vertex3(-cubesize, -cubesize, -cubesize);
+            GL.Color4(FaceColors[5]);
             GL.Vertex3(-cubesize, -cubesize, cubesize);
+            GL.Color4(FaceColors[4]);
             GL.Vertex3(-cubesize, cubesize, cubesize);
+            GL.Color4(FaceColors[3]);
             GL.Vertex3(-cubesize, cubesize, -cubesize);
 
-            GL.Color3(FaceColors[3]);
+            GL.Color4(FaceColors[2]);
             GL.Vertex3(-cubesize, -cubesize, cubesize);
+            GL.Color4(FaceColors[1]);
             GL.Vertex3(cubesize, -cubesize, cubesize);
+            GL.Color4(FaceColors[0]);
             GL.Vertex3(cubesize, cubesize, cubesize);
+            GL.Color4(FaceColors[2]);
             GL.Vertex3(-cubesize, cubesize, cubesize);
 
-            GL.Color3(FaceColors[4]);
+            GL.Color4(FaceColors[4]);
             GL.Vertex3(-cubesize, cubesize, -cubesize);
+            GL.Color4(FaceColors[6]);
             GL.Vertex3(-cubesize, cubesize, cubesize);
+            GL.Color4(FaceColors[7]);
             GL.Vertex3(cubesize, cubesize, cubesize);
+            GL.Color4(FaceColors[5]);
             GL.Vertex3(cubesize, cubesize, -cubesize);
 
-            GL.Color3(FaceColors[5]);
+            GL.Color4(FaceColors[3]);
             GL.Vertex3(cubesize, -cubesize, -cubesize);
+            GL.Color4(FaceColors[1]);
             GL.Vertex3(cubesize, cubesize, -cubesize);
+            GL.Color4(FaceColors[0]);
             GL.Vertex3(cubesize, cubesize, cubesize);
+            GL.Color4(FaceColors[2]);
             GL.Vertex3(cubesize, -cubesize, cubesize);
 
             GL.End();

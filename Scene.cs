@@ -19,12 +19,14 @@ namespace Graphics_Homework
 
         Cube cube = new Cube();
         Plane plane = new Plane();
+        Point point = new Point( 10 , 10, -10);
+
         Vector3 cameraPosition = new Vector3(30, 30, 30);
 
         float cameraToOriginAngle = 45;
         float cameraToOriginRadius = 30;
 
-        public Scene(string windowTitle) : base(800, 600, new GraphicsMode(32, 24, 0, 8), windowTitle)
+        public Scene(string windowTitle) : base(800, 600, new GraphicsMode(32, 24, 0, 10), windowTitle)
         {
             VSync = VSyncMode.On;
 
@@ -37,11 +39,11 @@ namespace Graphics_Homework
 
             GL.ClearColor(DEFAULT_BG_COLOR);
 
-            //GL.PolygonMode(MaterialFace.FrontAndBack, PolygonMode.Line);
-
+            GL.Enable(EnableCap.Multisample);
+            GL.Enable(EnableCap.Blend);
             GL.Enable(EnableCap.DepthTest);
             GL.DepthFunc(DepthFunction.Less);
-
+            
             GL.Hint(HintTarget.PolygonSmoothHint, HintMode.Nicest);
 
             previousMouse = new MouseState();
@@ -155,7 +157,7 @@ namespace Graphics_Homework
             GL.LoadMatrix(ref lookat);
 
             // Check for bottom collision then change displacement to -y
-            bool isnotColided = true;
+            bool isnotColided = false;
             if (isnotColided)
             {
                 cube.forceY = -9.8f;
@@ -174,7 +176,7 @@ namespace Graphics_Homework
 
             GL.Clear(ClearBufferMask.ColorBufferBit);
             GL.Clear(ClearBufferMask.DepthBufferBit);
-
+           
             // Render Code
             plane.DrawPlane();
 
@@ -182,6 +184,7 @@ namespace Graphics_Homework
             {
                 GL.PolygonMode(MaterialFace.FrontAndBack, PolygonMode.Line);
             }
+            point.DrawPoint();
             cube.DrawCube();
             GL.PolygonMode(MaterialFace.FrontAndBack, PolygonMode.Fill);
             
