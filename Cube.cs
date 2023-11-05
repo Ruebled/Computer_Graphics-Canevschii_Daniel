@@ -88,7 +88,7 @@ namespace Graphics_Homework
             this.position.X += this.velocity.X * dt;
 
             this.velocity.Z += (force.Z / mass) * dt;
-            this.position.Z = this.velocity.Z * dt;
+            this.position.Z += this.velocity.Z * dt;
 
             // Slowly decrease the force object's moving with
             float forceSecondDecrease = 30.0f;
