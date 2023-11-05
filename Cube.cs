@@ -31,16 +31,19 @@ namespace Graphics_Homework
             set { this.force.Z = value; }
         }
 
-        private float mass = 2.0f;
-        private float dt = 0.0f;
-        private Vector3 velocityVector = Vector3.Zero;
-        
-
         public float cubesize { get; set; }
+
+        private float mass {
+            get
+            {
+                return 2.0f * this.cubesize;
+            }
+        }
+        private float dt = 0.0f;
 
         private float cubePosAngle = 0;
 
-        private Vector3 position = new Vector3(0, 50, 0);
+        private Vector3 position = new Vector3(0, 20, 0);
         private Vector3 rotation = Vector3.Zero;
 
         private Color[] FaceColors = new Color[]
@@ -60,6 +63,8 @@ namespace Graphics_Homework
 
         public void UpdatePosition()
         {
+            // Using semi-implicit euler motion equation to
+            // move the object based on force applied
             DateTime DateTimen = DateTime.Now;
             this.dt = (float)((DateTimen - lastUpdateTime).TotalMilliseconds/1000.0);
             
@@ -72,8 +77,8 @@ namespace Graphics_Homework
             this.velocity.Z += (force.Z / mass) * dt;
             this.position.Z = this.velocity.Z * dt;
 
+            // Slowly decrease the force object's moving with
             float forceSecondDecrease = 30.0f;
-
             if(this.force.X > 0)
             {
                 this.force.X -= forceSecondDecrease * dt;
