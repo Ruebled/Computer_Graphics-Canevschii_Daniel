@@ -20,8 +20,10 @@ namespace Graphics_Homework
 
         public void DrawPoint()
         {
-            GL.PointSize(this.size);
+            GL.PointSize(10.0f);
+
             GL.Begin(PrimitiveType.Points);
+            GL.PointSize(1.0f);
             GL.Color3(this.color);
             GL.Vertex3(position);
             GL.End();
