@@ -39,7 +39,7 @@ namespace Graphics_Homework
             set
             {
                 this.Size = value;
-                this.position.Y = value;
+                this.position.Y = value + 0.1f;
             }
         }
 
@@ -147,6 +147,7 @@ namespace Graphics_Homework
 
         public void DrawCube()
         {
+            GL.Enable(EnableCap.Blend);
             GL.MatrixMode(MatrixMode.Modelview);
             GL.PushMatrix();
 

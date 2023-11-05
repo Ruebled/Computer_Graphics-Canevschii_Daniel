@@ -26,7 +26,7 @@ namespace Graphics_Homework
         float cameraToOriginAngle = 45;
         float cameraToOriginRadius = 30;
 
-        public Scene(string windowTitle) : base(800, 600, new GraphicsMode(32, 24, 0, 10), windowTitle)
+        public Scene(string windowTitle) : base(800, 600, new GraphicsMode(new ColorFormat(8, 8, 8, 8), 24, 0, 10), windowTitle)
         {
             VSync = VSyncMode.On;
 
@@ -41,6 +41,8 @@ namespace Graphics_Homework
 
             GL.Enable(EnableCap.Multisample);
             GL.Enable(EnableCap.Blend);
+            GL.BlendFunc(BlendingFactor.SrcAlpha, BlendingFactor.OneMinusSrcAlpha);
+
             GL.Enable(EnableCap.DepthTest);
             GL.DepthFunc(DepthFunction.Less);
             
