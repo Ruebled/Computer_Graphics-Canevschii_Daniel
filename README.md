@@ -3,13 +3,18 @@
 Canevschii Daniel - 3133A
 
 - [x] Make a 3D cube
-- [x] Make the cube translate on arrow key
 - [x] Make camera move on middle mouse button click and drag
 - [x] Change cube's face colors on 'c' Key to randoms ones
 - [x] Make the cube resize on scroll
-- [x] Make the cube rotate on x, z
 - [x] Toggle wireframe/fill mode on 'W' key
 - [x] File&Console logging
+- [x] Make cubes colors look smooth from one face to another
+- [ ] Create a point in logging files(add a function) on a key press for later revisit
+- [ ] Write a full help in Logging
+- [ ] Print Help on "H" key
+- [ ] Make the cube rotate on x, z
+- [ ] Make the cube translate on arrow key
+- [ ] Implement Force based motion in space of the cube 
 - [ ] Stop cube movement on plane borders
 - [ ] Think more on plane rotation(unintuitive directions)
 
