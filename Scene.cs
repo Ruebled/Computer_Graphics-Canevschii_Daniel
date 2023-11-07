@@ -22,8 +22,8 @@ namespace Graphics_Homework
         Vector3 cameraPosition = new Vector3(30, 30, 30);
 
         // Objects or array of objects to init for further rendering purpose
-        Cube cube = new Cube();
-        Plane plane = new Plane();
+        readonly Cube cube = new Cube();
+        readonly Plane plane = new Plane();
 
         public Scene(string windowTitle) : base(800, 600, new GraphicsMode(new ColorFormat(8, 8, 8, 8), 24, 0, 10), windowTitle)
         {
@@ -88,22 +88,24 @@ namespace Graphics_Homework
                 Exit();
             }
 
+            float ForceStep = 20f;
+
             // Movement of the cube on the plane and further...
             if (thisKeyboard[Key.Up])
             {
-                
+                cube.Force = new Vector3(cube.Force.X + ForceStep, cube.Force.Y, cube.Force.Z);
             }
             if (thisKeyboard[Key.Down])
             {
-                
+                cube.Force = new Vector3(cube.Force.X - ForceStep, cube.Force.Y, cube.Force.Z);
             }
             if (thisKeyboard[Key.Left])
             {
-                
+                cube.Force = new Vector3(cube.Force.X, cube.Force.Y, cube.Force.Z + ForceStep);
             }
             if (thisKeyboard[Key.Right])
             {
-                
+                cube.Force = new Vector3(cube.Force.X, cube.Force.Y, cube.Force.Z - ForceStep);
             }
 
             // Rotate the cube on anticlockwise on "X" Key Holding
@@ -117,16 +119,21 @@ namespace Graphics_Homework
                
             }
 
+            if (thisKeyboard[Key.B] && !previousKeyboard[Key.B])
+            {
+                Logging.SetMarker();
+            }
+
             // Change cube's face colors to random ones on "C" key press
             if (thisKeyboard[Key.C] && !previousKeyboard[Key.C])
             {
-                cube.generateFaceColors();
+                cube.GenerateFaceColors();
             }
 
             if (thisKeyboard[Key.W] && !previousKeyboard[Key.W])
             {
-                cube.cubePolygonModeWire ^= true;
-                if (cube.cubePolygonModeWire)
+                cube.CubePolygonModeWire ^= true;
+                if (cube.CubePolygonModeWire)
                 {
                     Logging.print("Set cube PolygonMode to Wire");
                 }
@@ -139,7 +146,7 @@ namespace Graphics_Homework
             // Camera movement around the center using the middle button and mouse move
             if (thisMouse[MouseButton.Middle])
             {
-                cameraToOriginAngle = (cameraToOriginAngle + ((thisMouse.X - previousMouse.X)/(float)100.0));
+                cameraToOriginAngle += ((thisMouse.X - previousMouse.X)/(float)100.0);
                 cameraPosition.X = (float)(0 + Math.Cos(cameraToOriginAngle) * cameraToOriginRadius);
                 cameraPosition.Z = (float)(0 + Math.Sin(cameraToOriginAngle) * cameraToOriginRadius);
 
@@ -156,21 +163,24 @@ namespace Graphics_Homework
                     + " Z:" + cameraPosition.Z);
             }
 
-            if (thisMouse.ScrollWheelValue > previousMouse.ScrollWheelValue && cube.scaleFactor<plane.getSize())
+            if (thisMouse.ScrollWheelValue > previousMouse.ScrollWheelValue && cube.ScaleFactor<plane.getSize())
             {
-                cube.scaleFactor += 1.0f;
-                Logging.print("Scale Factor = " + cube.scaleFactor);
+                cube.ScaleFactor += 1.0f;
+                Logging.print("Scale Factor = " + cube.ScaleFactor);
             }
 
-            if (thisMouse.ScrollWheelValue < previousMouse.ScrollWheelValue && cube.scaleFactor>1)
+            if (thisMouse.ScrollWheelValue < previousMouse.ScrollWheelValue && cube.ScaleFactor>1)
             {
-                cube.scaleFactor -= 1.0f;
-                Logging.print("Scale Factor = " + cube.scaleFactor);
+                cube.ScaleFactor -= 1.0f;
+                Logging.print("Scale Factor = " + cube.ScaleFactor);
             }
             
             // Save Mouse and Keyboard state for next event compare
             previousMouse = thisMouse;
             previousKeyboard = thisKeyboard;
+
+            // Update Cube Data
+            cube.UpdatePosition();
 
         }
 
