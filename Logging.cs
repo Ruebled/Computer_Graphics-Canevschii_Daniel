@@ -10,6 +10,7 @@ namespace Graphics_Homework
         private String FilePath;
         private static bool EnableFileWrite = false;
         private static FileStream file;
+        private static int MarkerIndex = 0;
 
         private Logging() 
         {
@@ -30,6 +31,19 @@ namespace Graphics_Homework
             {
                 Instance = new Logging();
             }
+
+            ConsoleOutput(message);
+            FileOutput(message);
+        }
+
+        public static void SetMarker()
+        {
+            if (Instance == null)
+            {
+                Instance = new Logging();
+            }
+
+            String message = "Marker number " + MarkerIndex++;
 
             ConsoleOutput(message);
             FileOutput(message);

@@ -8,8 +8,8 @@ namespace Graphics_Homework
     class Point
     {
         private Vector3 position;
-        private Color color;
-        private float size;
+        private readonly Color color;
+        private readonly float size;
 
         public Point(float x, float y, float z)
         {
@@ -20,7 +20,7 @@ namespace Graphics_Homework
 
         public void DrawPoint()
         {
-            GL.PointSize(10.0f);
+            GL.PointSize(this.size);
 
             GL.Begin(PrimitiveType.Points);
             GL.PointSize(1.0f);

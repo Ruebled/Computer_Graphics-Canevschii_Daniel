@@ -14,8 +14,8 @@ namespace Graphics_Homework
         private bool visibility;
         private float width;
         private Color color;
-        private float BIG_SIZE = 5.0f;
-        private float DEFAULT_SIZE = 1.0f;
+        private readonly float BIG_SIZE = 5.0f;
+        private readonly float DEFAULT_SIZE = 1.0f;
 
         public Line(Randomizer _r)
         {

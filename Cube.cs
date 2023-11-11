@@ -3,217 +3,197 @@ using OpenTK.Graphics.OpenGL;
 
 using System;
 using System.Drawing;
+using System.Runtime.Remoting.Metadata.W3cXsd2001;
 
 namespace Graphics_Homework
 {
     class Cube
     {
-        //Gravitation related properties
-        private DateTime lastUpdateTime = DateTime.Now;
-       
-        private Vector3 force = Vector3.Zero;
+        // Cube body parameters
+        private const float cubeSize = 1.0f;
+        public Vector3 Position { get; set; }
+        public float RotationAngle { get; set; }
+        public Vector3 RotationAxis { get; set; }
+        public float ScaleFactor { get; set; }
 
-        private Vector3 velocity = Vector3.Zero;
+        // Physics related parameters
+        public Vector3 Force {  get; set; }
+        public Vector3 Acceleration {  get; set; }
+        public Vector3 Speed { get; set; }
+        private float Mass => cubeSize * ScaleFactor;
 
-        public float forceX
-        {
-            get { return force.X;}
-            set { this.force.X = value; }
-        }
-        public float forceY
-        {
-            get { return force.Y; }
-            set { this.force.Y = value; }
-        }
-        public float forceZ
-        {
-            get { return force.Z; }
-            set { this.force.Z = value; }
-        }
-        private float Size;
-        public float cubesize {
-            get
-            {
-                return this.Size;
-            }
-            set
-            {
-                this.Size = value;
-                this.position.Y = value + 0.1f;
-            }
-        }
+        // Cube's face colors
+        private readonly Color[] FaceColors = new Color[8];
+        
+        // Polygon Mode cube display (wireframe/fill)
+        public bool CubePolygonModeWire {  get; set; }
 
-        private float mass {
-            get
-            {
-                return 2.0f * this.cubesize;
-            }
-        }
-        private float dt = 0.0f;
-
-        private float cubePosAngle = 0;
-
-        private Vector3 position = Vector3.Zero;
-        private Vector3 rotation = Vector3.Zero;
-
-        private Color[] FaceColors = new Color[]
-        {
-            Color.Silver,
-            Color.Honeydew,
-            Color.Moccasin,
-            Color.IndianRed,
-            Color.PaleVioletRed,
-            Color.ForestGreen,
-            Color.SkyBlue,
-            Color.Aquamarine
-        };
+        // Saved info
+        private DateTime lastDateTime = DateTime.Now;
+        private DateTime DateTimen;
 
         public Cube()
         {
-            this.cubesize = 1.0f;
-            this.position = new Vector3(0, this.cubesize, 0);
+            // Initialize cube's default parameters
+            this.Position = new Vector3(0.0f, 0.0f, 0.0f);
+            this.RotationAngle = 0.0f;
+            this.RotationAxis = new Vector3(0.0f, 0.0f, 0.0f);
+            this.ScaleFactor = 10.0f;
+
+            // Set cube rendering Polygon Mode
+            this.CubePolygonModeWire = false;
+
+            // Set up Physics variables
+            this.Force = Vector3.Zero;
+            this.Acceleration = Vector3.Zero;
+            this.Speed = Vector3.Zero;
+
+            // Print log information
+            Logging.print("Created a cube:\n" +
+                " - Size: " + cubeSize + "\n" +
+                " - Position: " + this.Position + "\n" +
+                " - Rotation (Angle, X, Y, Z): " + this.RotationAngle +
+                " " + this.RotationAxis + "\n" +
+                " - Scale Factor: " + this.ScaleFactor + "\n" +
+                " - Polygon Mode Render Fill");
+
+            // Create cube's vertex colors
+            this.GenerateFaceColors();
         }
 
-        public void UpdatePosition()
-        {
-            // Using semi-implicit euler motion equation to
-            // move the object based on force applied
-            DateTime DateTimen = DateTime.Now;
-            this.dt = (float)((DateTimen - lastUpdateTime).TotalMilliseconds/1000.0);
-            
-            this.velocity.Y += (force.Y / mass) * dt;
-            this.position.Y += this.velocity.Y * dt;
-
-            this.velocity.X += (force.X / mass) * dt;
-            this.position.X += this.velocity.X * dt;
-
-            this.velocity.Z += (force.Z / mass) * dt;
-            this.position.Z += this.velocity.Z * dt;
-
-            // Slowly decrease the force object's moving with
-            float forceSecondDecrease = 30.0f;
-            if(this.force.X > 0)
-            {
-                this.force.X -= forceSecondDecrease * dt;
-            }
-            else if (this.force.X < 0)
-            {
-                this.force.X += forceSecondDecrease * dt;
-            }
-            if (this.force.Y > 0)
-            {
-                this.force.Y -= forceSecondDecrease * dt;
-            }
-            else if(this.force.Y < 0)
-            {
-                this.force.Y += forceSecondDecrease * dt;
-            }
-            if (this.force.Z > 0)
-            {
-                this.force.Z -= forceSecondDecrease * dt;
-            }
-            else if (this.force.Z < 0)
-            {
-                this.force.Z += forceSecondDecrease * dt;
-            }
-
-            this.lastUpdateTime = DateTime.Now;
-        }
-
-        public void setRotationAngle(float PosAngle)
-        {
-            this.cubePosAngle += PosAngle;
-        }
-
-        public void setRotationAxis(Vector3 rotation)
-        {
-            this.rotation.X = rotation.X;
-            this.rotation.Y = rotation.Y;  
-            this.rotation.Z = rotation.Z;
-        }
-
-        public Vector3 getPosition()
-        {
-            return this.position;
-        }
-
-        public void changeFaceColors(Randomizer _r)
-        {
-            for(int i = 0;i<this.FaceColors.Length;i++)
+        public void GenerateFaceColors()
+        { 
+            Randomizer _r = new Randomizer();
+            Logging.print("Generated cube's vertex colors:");
+            for (int i = 0; i < this.FaceColors.Length; i++)
             {
                 this.FaceColors[i] = _r.GetRandomColor();
+                Logging.print("\tVertex[" + i + "] = " + this.FaceColors[i].ToString());
             }
         }
+        
+        public void UpdatePosition()
+        {
+            this.DateTimen = DateTime.Now;
+            float dt = (float)1/(float)30;
 
+            // F = m*a
+            this.Acceleration = new Vector3
+            {
+                X = this.Force.X / this.Mass,
+                Y = this.Force.Y / this.Mass,
+                Z = this.Force.Z / this.Mass
+            };
+
+            this.Speed = new Vector3()
+            {
+                X = this.Acceleration.X * dt,
+                Y = this.Acceleration.Y * dt,
+                Z = this.Acceleration.Z * dt
+            };
+
+            Vector3 ChangeInPosition = new Vector3()
+            {
+                X = this.Speed.X * dt,
+                Y = this.Speed.Y * dt,
+                Z = this.Speed.Z * dt
+            };
+
+            this.Position += ChangeInPosition;
+
+            if(ChangeInPosition != Vector3.Zero)
+            {
+                Logging.print("X: " + this.Position.X.ToString() + " " +
+                "Y: " + this.Position.Y.ToString() + " " +
+                "Z: " + this.Position.Z.ToString());
+            }
+
+            this.lastDateTime = DateTimen;
+
+            DecreaseForce();
+        }
+
+        private void DecreaseForce()
+        {
+
+        }
         public void DrawCube()
         {
-            GL.Enable(EnableCap.Blend);
-            GL.MatrixMode(MatrixMode.Modelview);
+            if (this.CubePolygonModeWire)
+            {
+                GL.PolygonMode(MaterialFace.FrontAndBack, PolygonMode.Line);
+            } 
+
             GL.PushMatrix();
 
-            GL.Translate(position);
+            // Applying transformation on the next to be drawn shape
+            GL.Translate(this.Position);
+            GL.Rotate(this.RotationAngle, this.RotationAxis);
+            GL.Scale(this.ScaleFactor, this.ScaleFactor, this.ScaleFactor);
 
-            GL.Rotate(this.cubePosAngle, this.rotation);
-
+            // Start drawing the vertex as Quads
             GL.Begin(PrimitiveType.Quads);
 
             GL.Color4(FaceColors[0]);
-            GL.Vertex3(-cubesize, -cubesize, -cubesize);
+            GL.Vertex3(-cubeSize, -cubeSize, -cubeSize);
             GL.Color4(FaceColors[1]);
-            GL.Vertex3(-cubesize, cubesize, -cubesize);
+            GL.Vertex3(-cubeSize, cubeSize, -cubeSize);
             GL.Color4(FaceColors[2]);
-            GL.Vertex3(cubesize, cubesize, -cubesize);
+            GL.Vertex3(cubeSize, cubeSize, -cubeSize);
             GL.Color4(FaceColors[3]);
-            GL.Vertex3(cubesize, -cubesize, -cubesize);
+            GL.Vertex3(cubeSize, -cubeSize, -cubeSize);
 
-            GL.Color4(FaceColors[4]);
-            GL.Vertex3(-cubesize, -cubesize, -cubesize);
-            GL.Color4(FaceColors[5]);
-            GL.Vertex3(cubesize, -cubesize, -cubesize);
-            GL.Color4(FaceColors[6]);
-            GL.Vertex3(cubesize, -cubesize, cubesize);
-            GL.Color4(FaceColors[7]);
-            GL.Vertex3(-cubesize, -cubesize, cubesize);
-
-            GL.Color4(FaceColors[6]);
-            GL.Vertex3(-cubesize, -cubesize, -cubesize);
-            GL.Color4(FaceColors[5]);
-            GL.Vertex3(-cubesize, -cubesize, cubesize);
-            GL.Color4(FaceColors[4]);
-            GL.Vertex3(-cubesize, cubesize, cubesize);
-            GL.Color4(FaceColors[3]);
-            GL.Vertex3(-cubesize, cubesize, -cubesize);
-
-            GL.Color4(FaceColors[2]);
-            GL.Vertex3(-cubesize, -cubesize, cubesize);
-            GL.Color4(FaceColors[1]);
-            GL.Vertex3(cubesize, -cubesize, cubesize);
             GL.Color4(FaceColors[0]);
-            GL.Vertex3(cubesize, cubesize, cubesize);
-            GL.Color4(FaceColors[2]);
-            GL.Vertex3(-cubesize, cubesize, cubesize);
-
-            GL.Color4(FaceColors[4]);
-            GL.Vertex3(-cubesize, cubesize, -cubesize);
+            GL.Vertex3(-cubeSize, -cubeSize, -cubeSize);
+            GL.Color4(FaceColors[3]);
+            GL.Vertex3(cubeSize, -cubeSize, -cubeSize);
             GL.Color4(FaceColors[6]);
-            GL.Vertex3(-cubesize, cubesize, cubesize);
+            GL.Vertex3(cubeSize, -cubeSize, cubeSize);
             GL.Color4(FaceColors[7]);
-            GL.Vertex3(cubesize, cubesize, cubesize);
+            GL.Vertex3(-cubeSize, -cubeSize, cubeSize);
+
+            GL.Color4(FaceColors[0]);
+            GL.Vertex3(-cubeSize, -cubeSize, -cubeSize);
+            GL.Color4(FaceColors[7]);
+            GL.Vertex3(-cubeSize, -cubeSize, cubeSize);
             GL.Color4(FaceColors[5]);
-            GL.Vertex3(cubesize, cubesize, -cubesize);
+            GL.Vertex3(-cubeSize, cubeSize, cubeSize);
+            GL.Color4(FaceColors[1]);
+            GL.Vertex3(-cubeSize, cubeSize, -cubeSize);
+
+            GL.Color4(FaceColors[7]);
+            GL.Vertex3(-cubeSize, -cubeSize, cubeSize);
+            GL.Color4(FaceColors[6]);
+            GL.Vertex3(cubeSize, -cubeSize, cubeSize);
+            GL.Color4(FaceColors[4]);
+            GL.Vertex3(cubeSize, cubeSize, cubeSize);
+            GL.Color4(FaceColors[5]);
+            GL.Vertex3(-cubeSize, cubeSize, cubeSize);
+
+            GL.Color4(FaceColors[1]);
+            GL.Vertex3(-cubeSize, cubeSize, -cubeSize);
+            GL.Color4(FaceColors[5]);
+            GL.Vertex3(-cubeSize, cubeSize, cubeSize);
+            GL.Color4(FaceColors[4]);
+            GL.Vertex3(cubeSize, cubeSize, cubeSize);
+            GL.Color4(FaceColors[2]);
+            GL.Vertex3(cubeSize, cubeSize, -cubeSize);
 
             GL.Color4(FaceColors[3]);
-            GL.Vertex3(cubesize, -cubesize, -cubesize);
-            GL.Color4(FaceColors[1]);
-            GL.Vertex3(cubesize, cubesize, -cubesize);
-            GL.Color4(FaceColors[0]);
-            GL.Vertex3(cubesize, cubesize, cubesize);
+            GL.Vertex3(cubeSize, -cubeSize, -cubeSize);
             GL.Color4(FaceColors[2]);
-            GL.Vertex3(cubesize, -cubesize, cubesize);
+            GL.Vertex3(cubeSize, cubeSize, -cubeSize);
+            GL.Color4(FaceColors[4]);
+            GL.Vertex3(cubeSize, cubeSize, cubeSize);
+            GL.Color4(FaceColors[6]);
+            GL.Vertex3(cubeSize, -cubeSize, cubeSize);
 
             GL.End();
 
             GL.PopMatrix();
+
+            // Reset rendering polygon mode to fill
+            GL.PolygonMode(MaterialFace.FrontAndBack, PolygonMode.Fill);
         }
     }
 }
