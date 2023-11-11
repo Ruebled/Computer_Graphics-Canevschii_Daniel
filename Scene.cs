@@ -16,14 +16,10 @@ namespace Graphics_Homework
         private KeyboardState previousKeyboard;
         private MouseState previousMouse;
 
-        // Camera specific variables
-        float cameraToOriginAngle = 45;
-        float cameraToOriginRadius = 30;
-        Vector3 cameraPosition = new Vector3(30, 30, 30);
-
         // Objects or array of objects to init for further rendering purpose
         readonly Cube cube = new Cube();
         readonly Plane plane = new Plane();
+        readonly Camera camera = new Camera();
 
         public Scene(string windowTitle) : base(800, 600, new GraphicsMode(new ColorFormat(8, 8, 8, 8), 24, 0, 10), windowTitle)
         {
@@ -56,7 +52,7 @@ namespace Graphics_Homework
 
         protected override void OnResize(EventArgs e)
         {
-            base.OnResize(e);
+            
 
             // set viewport
             GL.Viewport(0, 0, this.Width, this.Height);
@@ -66,12 +62,8 @@ namespace Graphics_Homework
             GL.MatrixMode(MatrixMode.Projection);
             GL.LoadMatrix(ref perspective);
 
-            
-            // Set Camera View
-            Matrix4 lookat = Matrix4.LookAt(cameraPosition.X, cameraPosition.Y, cameraPosition.Z, 0, 0, 0, 0, 1, 0);
-            GL.MatrixMode(MatrixMode.Modelview);
-            GL.LoadMatrix(ref lookat);
-            
+            camera.render();
+            base.OnResize(e);
         }
 
         protected override void OnUpdateFrame(FrameEventArgs e)
@@ -146,21 +138,7 @@ namespace Graphics_Homework
             // Camera movement around the center using the middle button and mouse move
             if (thisMouse[MouseButton.Middle])
             {
-                cameraToOriginAngle += ((thisMouse.X - previousMouse.X)/(float)100.0);
-                cameraPosition.X = (float)(0 + Math.Cos(cameraToOriginAngle) * cameraToOriginRadius);
-                cameraPosition.Z = (float)(0 + Math.Sin(cameraToOriginAngle) * cameraToOriginRadius);
-
-                cameraToOriginRadius += (thisMouse.Y - previousMouse.Y) / (float)10;
-
-                // Set Camera View
-                Matrix4 lookat = Matrix4.LookAt(cameraPosition.X, cameraPosition.Y, cameraPosition.Z, 0, 0, 0, 0, 1, 0);
-                GL.MatrixMode(MatrixMode.Modelview);
-                GL.LoadMatrix(ref lookat);
-
-                Logging.print("Camera View Set To:" 
-                    + " X:" + cameraPosition.X
-                    + " Y:" + cameraPosition.Y
-                    + " Z:" + cameraPosition.Z);
+                camera.update(thisMouse, previousMouse);
             }
 
             if (thisMouse.ScrollWheelValue > previousMouse.ScrollWheelValue && cube.ScaleFactor<plane.getSize())
