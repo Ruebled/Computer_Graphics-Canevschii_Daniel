@@ -71,6 +71,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Camera.cs" />
+    <Compile Include="ComplexObject.cs" />
     <Compile Include="Cube.cs" />
     <Compile Include="Line.cs" />
     <Compile Include="Logging.cs" />

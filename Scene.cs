@@ -21,6 +21,19 @@ namespace Graphics_Homework
         readonly Plane plane = new Plane();
         readonly Camera camera = new Camera();
 
+        static readonly string AssetsFolder = "..\\..\\assets";
+        static readonly string[] Assets = new string[]
+        {
+            "bottle_cap_obj.obj",
+            "lowpolytree.obj",
+            "slime.obj",
+            "soccer_ball.obj",
+            "volleyball.obj",
+            "Lowpoly_tree_sample.obj"
+        };
+
+        readonly ComplexObject complexObject = new ComplexObject(AssetsFolder + "\\" +  Assets[5]);
+
         public Scene(string windowTitle) : base(800, 600, new GraphicsMode(new ColorFormat(8, 8, 8, 8), 24, 0, 10), windowTitle)
         {
             VSync = VSyncMode.On;
@@ -52,7 +65,7 @@ namespace Graphics_Homework
 
         protected override void OnResize(EventArgs e)
         {
-            
+            base.OnResize(e);
 
             // set viewport
             GL.Viewport(0, 0, this.Width, this.Height);
@@ -63,7 +76,6 @@ namespace Graphics_Homework
             GL.LoadMatrix(ref perspective);
 
             camera.render();
-            base.OnResize(e);
         }
 
         protected override void OnUpdateFrame(FrameEventArgs e)
@@ -173,6 +185,7 @@ namespace Graphics_Homework
 
             plane.DrawPlane();
             cube.DrawCube();
+            complexObject.Draw();
 
             // End Render Code
 

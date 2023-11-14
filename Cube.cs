@@ -2,13 +2,16 @@
 using OpenTK.Graphics.OpenGL;
 
 using System;
+using System.Collections.Generic;
 using System.Drawing;
-using System.Runtime.Remoting.Metadata.W3cXsd2001;
 
 namespace Graphics_Homework
 {
     class Cube
     {
+        // Cube Vertex data
+        private List<Vector3> CubeV;
+
         // Cube body parameters
         private const float cubeSize = 1.0f;
         public Vector3 Position { get; set; }
@@ -34,11 +37,20 @@ namespace Graphics_Homework
 
         public Cube()
         {
+            try
+            {
+                CubeV = readCubeData();
+            }
+            catch
+            {
+                Logging.print("Error getting the cube");
+            }
+
             // Initialize cube's default parameters
             this.Position = new Vector3(0.0f, 0.0f, 0.0f);
             this.RotationAngle = 0.0f;
             this.RotationAxis = new Vector3(0.0f, 0.0f, 0.0f);
-            this.ScaleFactor = 10.0f;
+            this.ScaleFactor = 1.0f;
 
             // Set cube rendering Polygon Mode
             this.CubePolygonModeWire = false;
@@ -59,6 +71,13 @@ namespace Graphics_Homework
 
             // Create cube's vertex colors
             this.GenerateFaceColors();
+        }
+
+        private List<Vector3> readCubeData()
+        {
+            List<Vector3> cubeData = new List<Vector3>();
+
+            return cubeData;
         }
 
         public void GenerateFaceColors()
