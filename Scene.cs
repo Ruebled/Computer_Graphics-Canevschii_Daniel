@@ -17,11 +17,14 @@ namespace Graphics_Homework
         private MouseState previousMouse;
 
         // Objects or array of objects to init for further rendering purpose
-        readonly Cube cube = new Cube();
+        readonly Objects objects = new Objects();
+
+        // Rewrite next objects as Singleton Patern Object
         readonly Plane plane = new Plane();
         readonly Camera camera = new Camera();
         readonly Grid grid = new Grid();
 
+        // Variables to choose faster object to import
         static readonly string AssetsFolder = "..\\..\\assets";
         static readonly string[] Assets = new string[]
         {
@@ -32,7 +35,7 @@ namespace Graphics_Homework
             "volleyball.obj",
         };
 
-        readonly ComplexObject complexObject = new ComplexObject(AssetsFolder + "\\" +  Assets[3]);
+
 
         public Scene(string windowTitle) : base(800, 600, new GraphicsMode(new ColorFormat(8, 8, 8, 8), 24, 0, 10), windowTitle)
         {
@@ -61,6 +64,10 @@ namespace Graphics_Homework
             // Save initial mouse&keyboard states
             previousMouse = new MouseState();
             previousKeyboard = new KeyboardState();
+
+
+            // Add a cube to the list of imported objects
+            objects.Add(AssetsFolder + "\\" + Assets[3]);
         }
 
         protected override void OnResize(EventArgs e)
@@ -94,30 +101,30 @@ namespace Graphics_Homework
 
             float ForceStep = 20f;
 
-            // Movement of the cube on the plane and further...
+            // Movement of the objects.Selected() on the plane and further...
             if (thisKeyboard[Key.Up])
             {
-                cube.Force = new Vector3(cube.Force.X + ForceStep, cube.Force.Y, cube.Force.Z);
+                objects.Selected().Force = new Vector3(objects.Selected().Force.X + ForceStep, objects.Selected().Force.Y, objects.Selected().Force.Z);
             }
             if (thisKeyboard[Key.Down])
             {
-                cube.Force = new Vector3(cube.Force.X - ForceStep, cube.Force.Y, cube.Force.Z);
+                objects.Selected().Force = new Vector3(objects.Selected().Force.X - ForceStep, objects.Selected().Force.Y, objects.Selected().Force.Z);
             }
             if (thisKeyboard[Key.Left])
             {
-                cube.Force = new Vector3(cube.Force.X, cube.Force.Y, cube.Force.Z + ForceStep);
+                objects.Selected().Force = new Vector3(objects.Selected().Force.X, objects.Selected().Force.Y, objects.Selected().Force.Z + ForceStep);
             }
             if (thisKeyboard[Key.Right])
             {
-                cube.Force = new Vector3(cube.Force.X, cube.Force.Y, cube.Force.Z - ForceStep);
+                objects.Selected().Force = new Vector3(objects.Selected().Force.X, objects.Selected().Force.Y, objects.Selected().Force.Z - ForceStep);
             }
 
-            // Rotate the cube on anticlockwise on "X" Key Holding
+            // Rotate the objects.Selected() on anticlockwise on "X" Key Holding
             if (thisKeyboard[Key.X])
             {
 
             }
-            // Rotate the cube on clockwise on "Z" Key Holding
+            // Rotate the objects.Selected() on clockwise on "Z" Key Holding
             if (thisKeyboard[Key.Z])
             {
                
@@ -128,41 +135,54 @@ namespace Graphics_Homework
                 Logging.SetMarker();
             }
 
-            // Change cube's face colors to random ones on "C" key press
+            // Change objects.Selected()'s face colors to random ones on "C" key press
             if (thisKeyboard[Key.C] && !previousKeyboard[Key.C])
             {
-                cube.GenerateFaceColors();
+                objects.Selected().GenerateFaceColors();
             }
 
             if (thisKeyboard[Key.W] && !previousKeyboard[Key.W])
             {
-                cube.CubePolygonModeWire ^= true;
-                if (cube.CubePolygonModeWire)
+                objects.Selected().CubePolygonModeWire ^= true;
+                if (objects.Selected().CubePolygonModeWire)
                 {
-                    Logging.print("Set cube PolygonMode to Wire");
+                    Logging.print("Set objects.Selected() PolygonMode to Wire");
                 }
                 else
                 {
-                    Logging.print("Set cube PolygonMode to Fill");
+                    Logging.print("Set objects.Selected() PolygonMode to Fill");
                 }
             }
 
             // Camera movement around the center using the middle button and mouse move
             if (thisMouse[MouseButton.Middle])
             {
-                camera.update(thisMouse, previousMouse);
+                if (thisMouse != previousMouse)
+                {
+                    camera.update(thisMouse, previousMouse);
+                }
             }
 
-            if (thisMouse.ScrollWheelValue > previousMouse.ScrollWheelValue && cube.ScaleFactor<plane.getSize())
+            if (thisMouse.ScrollWheelValue > previousMouse.ScrollWheelValue && objects.Selected().ScaleFactor >= 1.0f)
             {
-                cube.ScaleFactor += 1.0f;
-                Logging.print("Scale Factor = " + cube.ScaleFactor);
+                objects.Selected().ScaleFactor += objects.Selected().ScaleFactor / 10;
+                Logging.print("Scale Factor = " + objects.Selected().ScaleFactor);
+            }
+            else if (thisMouse.ScrollWheelValue > previousMouse.ScrollWheelValue && objects.Selected().ScaleFactor <= 1)
+            {
+                objects.Selected().ScaleFactor += objects.Selected().ScaleFactor / 10;
+                Logging.print("Scale Factor = " + objects.Selected().ScaleFactor);
             }
 
-            if (thisMouse.ScrollWheelValue < previousMouse.ScrollWheelValue && cube.ScaleFactor>1)
+            if (thisMouse.ScrollWheelValue < previousMouse.ScrollWheelValue && objects.Selected().ScaleFactor>=2)
             {
-                cube.ScaleFactor -= 1.0f;
-                Logging.print("Scale Factor = " + cube.ScaleFactor);
+                objects.Selected().ScaleFactor -= objects.Selected().ScaleFactor / 10;
+                Logging.print("Scale Factor = " + objects.Selected().ScaleFactor);
+            }
+            else if(thisMouse.ScrollWheelValue < previousMouse.ScrollWheelValue )
+            {
+                objects.Selected().ScaleFactor -= objects.Selected().ScaleFactor/10;
+                Logging.print("Scale Factor = " + objects.Selected().ScaleFactor);
             }
             
             // Save Mouse and Keyboard state for next event compare
@@ -170,7 +190,7 @@ namespace Graphics_Homework
             previousKeyboard = thisKeyboard;
 
             // Update Cube Data
-            cube.UpdatePosition();
+            objects.UpdatePosition();
             grid.UpdateGrid(camera.getPosition());
 
         }
@@ -185,8 +205,7 @@ namespace Graphics_Homework
             // Render Code
             grid.Draw();
             plane.DrawPlane();
-            cube.DrawCube();
-            complexObject.Draw();
+            objects.Draw();
 
             // End Render Code
 

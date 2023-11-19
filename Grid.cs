@@ -40,10 +40,6 @@ namespace Graphics_Homework
                 // XZ plan drawing: parallel with Oz
                 GL.Vertex3(i + MICRO_OFFSET, 0, POINT_OFFSET + CameraOffsetY);
                 GL.Vertex3(i + MICRO_OFFSET, 0, (-1 * POINT_OFFSET) + CameraOffsetY);
-
-                Logging.print("Line with points: (" + i+MICRO_OFFSET + ", " + POINT_OFFSET + CameraOffsetY + ")" + "(" + i+MICRO_OFFSET + ", " + (-1 * POINT_OFFSET) + CameraOffsetY + ")");
-
-
             }
             
             for (int j = -POINT_OFFSET + (CameraOffsetY); j <= POINT_OFFSET + CameraOffsetY; j += GRIDSTEP)

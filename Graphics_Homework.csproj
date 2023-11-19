@@ -71,11 +71,11 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Camera.cs" />
-    <Compile Include="ComplexObject.cs" />
-    <Compile Include="Cube.cs" />
+    <Compile Include="Object.cs" />
     <Compile Include="Grid.cs" />
     <Compile Include="Line.cs" />
     <Compile Include="Logging.cs" />
+    <Compile Include="Objects.cs" />
     <Compile Include="Plane.cs" />
     <Compile Include="Point.cs" />
     <Compile Include="Program.cs" />
