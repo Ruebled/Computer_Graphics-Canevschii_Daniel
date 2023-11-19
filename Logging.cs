@@ -58,8 +58,11 @@ namespace Graphics_Homework
         {
             if (EnableFileWrite)
             {
-                byte[] b_string = new UTF8Encoding(true).GetBytes(_string);
+                String stringT = _string + "r\n";
+                byte[] b_string = new UTF8Encoding(true).GetBytes(stringT);
                 file.Write(b_string, 0, _string.Length);
+                b_string = new UTF8Encoding(true).GetBytes(Environment.NewLine);
+                file.Write(b_string, 0, Environment.NewLine.Length);
             }
         }
 
