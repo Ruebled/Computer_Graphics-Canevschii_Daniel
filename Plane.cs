@@ -1,4 +1,5 @@
 ﻿using OpenTK;
+using OpenTK.Graphics;
 using OpenTK.Graphics.OpenGL;
 
 using System.Drawing;
@@ -27,7 +28,7 @@ namespace Graphics_Homework
 
             GL.Begin(PrimitiveType.Quads);
 
-            GL.Color3(Color.Black);
+            GL.Color3(Color.FromArgb(100, 34, 89, 123));
             GL.Vertex3(-this.planeSize, 0, -this.planeSize);
             GL.Vertex3(-this.planeSize, 0, this.planeSize);
             GL.Vertex3(this.planeSize, 0, this.planeSize);
