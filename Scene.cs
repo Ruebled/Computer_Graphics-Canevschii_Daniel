@@ -10,7 +10,7 @@ namespace Graphics_Homework
     class Scene : GameWindow
     {
         // BG colour used as scene color
-        Color4 DEFAULT_BG_COLOR = Color4.LightBlue;
+        Color4 DEFAULT_BG_COLOR = Color4.Black;
 
         // Define Mouse&Keyboard states for key press/movement events
         private KeyboardState previousKeyboard;
@@ -20,6 +20,7 @@ namespace Graphics_Homework
         readonly Cube cube = new Cube();
         readonly Plane plane = new Plane();
         readonly Camera camera = new Camera();
+        readonly Grid grid = new Grid();
 
         static readonly string AssetsFolder = "..\\..\\assets";
         static readonly string[] Assets = new string[]
@@ -29,10 +30,9 @@ namespace Graphics_Homework
             "slime.obj",
             "soccer_ball.obj",
             "volleyball.obj",
-            "Lowpoly_tree_sample.obj"
         };
 
-        readonly ComplexObject complexObject = new ComplexObject(AssetsFolder + "\\" +  Assets[5]);
+        readonly ComplexObject complexObject = new ComplexObject(AssetsFolder + "\\" +  Assets[3]);
 
         public Scene(string windowTitle) : base(800, 600, new GraphicsMode(new ColorFormat(8, 8, 8, 8), 24, 0, 10), windowTitle)
         {
@@ -171,6 +171,7 @@ namespace Graphics_Homework
 
             // Update Cube Data
             cube.UpdatePosition();
+            grid.UpdateGrid(camera.getPosition());
 
         }
 
@@ -180,9 +181,9 @@ namespace Graphics_Homework
 
             GL.Clear(ClearBufferMask.ColorBufferBit);
             GL.Clear(ClearBufferMask.DepthBufferBit);
-           
-            // Render Code
 
+            // Render Code
+            grid.Draw();
             plane.DrawPlane();
             cube.DrawCube();
             complexObject.Draw();

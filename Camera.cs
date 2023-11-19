@@ -24,6 +24,8 @@ namespace Graphics_Homework
             cameraPosition = new Vector3(30, 30, 30);
         }
 
+        public Vector3 getPosition() { return cameraPosition; }
+
         public void update(MouseState thisMouse, MouseState previousMouse)
         {
             cameraToOriginAngle += ((thisMouse.X - previousMouse.X) / (float)100.0);
